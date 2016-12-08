@@ -11,21 +11,50 @@ class App extends React.Component {
     stocks: []
   }
 
-  handleAddStock = stock => {
-    if (stock !== '') {
-      const newStocks = [ ...this.state.stocks, stock ]
+  componentDidMount() {
+
+    socket.on('sentAllStocks', ({ allStocks }) => {
+      this.setState({ stocks: allStocks })
+    })
+
+    socket.on('addThisStock', ({ stockToAdd }) => {
+      const { stocks } = this.state
+
+      const newStocks = [ ...stocks, stockToAdd ]
       this.setState({ stocks: newStocks })
+    })
+
+    socket.on('removeThisStock', ({ stockToRemove }) => {
+      const { stocks } = this.state
+
+      const newStocks = stocks.filter( stock => (stock !== stockToRemove) )
+      this.setState({ stocks: newStocks })
+    } )
+  }
+
+  handleAddStock = stockToAdd => {
+    const { stocks } = this.state
+
+    if (stockToAdd !== '') {
+      const newStocks = [ ...stocks, stockToAdd ]
+      this.setState({ stocks: newStocks })
+
+      socket.emit('addedStock', { stockToAdd })
     }
   }
 
-  handleDeleteStock = deleteIndex => {
-    const newStocks = this.state.stocks
-                        .filter((stock, index) => (index !== deleteIndex))
+  handleDeleteStock = stockToRemove => {
+    const { stocks } = this.state
+
+    const newStocks = stocks.filter( stock => stock !== stockToRemove )
     this.setState({ stocks: newStocks })
+
+    socket.emit('removedStock', { stockToRemove })
   }
 
   render() {
     const { stocks } = this.state
+
     return (
       <div className="container" style={{width: '250px'}}>
         <ListGroup>
@@ -36,7 +65,7 @@ class App extends React.Component {
                 <Glyphicon
                   glyph="remove"
                   style={{ float: 'right', color: 'red'}}
-                  onClick={() => this.handleDeleteStock(index)} />
+                  onClick={() => this.handleDeleteStock(stock)} />
               </ListGroupItem>
             ))
           }
