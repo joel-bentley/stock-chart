@@ -13,14 +13,13 @@ class App extends React.Component {
 
   handleAddStock = stock => {
     if (stock !== '') {
-      const newStocks = JSON.parse(JSON.stringify(this.state.stocks))
-                        .concat([ stock ])
+      const newStocks = [ ...this.state.stocks, stock ]
       this.setState({ stocks: newStocks })
     }
   }
 
   handleDeleteStock = deleteIndex => {
-    const newStocks = JSON.parse(JSON.stringify(this.state.stocks))
+    const newStocks = this.state.stocks
                         .filter((stock, index) => (index !== deleteIndex))
     this.setState({ stocks: newStocks })
   }
