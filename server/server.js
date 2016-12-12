@@ -1,31 +1,64 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var dotenv = require('dotenv');
+dotenv.load();
 
-var stocks = ['GOOG','TSLA','MMM', 'AAPL'];
+var getStockData = require('./getStockData');
+
+var stockNames = ['GOOG','TSLA','MMM', 'AAPL'];
 
 app.get('/', function(req, res){
   res.send('<h1>Hello world</h1>');
 });
 
+
 io.on('connection', function(socket){
   console.log('a user connected');
 
-  socket.emit('sentAllStocks', { allStocks: stocks });
+  getStockData(stockNames)
+    .then(function(allStocks) {
+      
+        socket.emit('sentAllStocks', { allStocks: allStocks });
+      })
+    .catch(err => console.log('error:', err))
+
+
 
   socket.on('addedStock', function(data) {
-    stocks = stocks.concat([data.stockToAdd]);
 
-    socket.broadcast.emit('addThisStock', { stockToAdd: data.stockToAdd });
+    var stockNameToAdd = data.stockNameToAdd;
+
+    getStockData([ stockNameToAdd ])
+      .then(function(stockData) {
+
+          var stockToAdd = stockData[0];
+
+          if (stockToAdd.data.length) {
+            stockNames = stockNames.concat([stockNameToAdd]);
+            return io.emit('addThisStock', { stockToAdd: stockToAdd });
+          }
+
+          socket.emit('removeThisStock', { stockNameToRemove: stockNameToAdd });
+        })
+      .catch(err => {
+          socket.emit('removeThisStock', { stockNameToRemove: stockNameToAdd });
+          return console.log('error:', err);
+        });
+
   });
+
 
   socket.on('removedStock', function(data) {
-    stocks = stocks.filter(function(stock) {
-      return stock !== data.stockToRemove
+    var stockNameToRemove = data.stockNameToRemove;
+
+    stockNames = stockNames.filter(function(stockName) {
+      return stockName !== stockNameToRemove
     });
 
-    socket.broadcast.emit('removeThisStock', { stockToRemove: data.stockToRemove });
+    socket.broadcast.emit('removeThisStock', { stockNameToRemove: stockNameToRemove });
   });
+
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
