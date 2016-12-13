@@ -1,5 +1,5 @@
 import React from 'react'
-import { Glyphicon, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { Col, Glyphicon } from 'react-bootstrap'
 import io from 'socket.io-client'
 const socket = io('http://localhost:3001')
 
@@ -68,43 +68,54 @@ class App extends React.Component {
   render() {
     const { stocks } = this.state
 
+    const columnWidths = {
+      xs: 12,
+      sm: 6,
+      md: 4,
+      lg: 3
+    }
+
     highchartsConfig.series = stocks
+
 
     return (
       <div className="container">
+
         <ReactHighstock config={highchartsConfig} />
 
         <div>
-          <ListGroup>
-            {
-              stocks.map((stock, index) => {
 
-                const isLoading = !stock.data.length
-                const style = isLoading ? {textColor: 'gray'} : {}
+          {
+            stocks.map((stock, index) => {
 
-                return (
-                  <ListGroupItem key={`stocks-${index}`}>
+              const isLoading = !stock.data.length
+              const style = isLoading ? {color: '#bbb'} : {}
+              return (
+                <Col {...columnWidths} key={`stocks-${index}`}>
+                  <div className="card stock">
                     <span className="h3" style={style}>{stock.name}</span>
                     <Glyphicon
                       glyph="remove"
                       style={{ float: 'right', color: 'red'}}
                       onClick={() => this.handleDeleteStock(stock.name)} />
-                  </ListGroupItem>
-                )
-              })
-            }
-            <ListGroupItem>
+                  </div>
+                </Col>
+              )
+            })
+          }
+          <Col {...columnWidths}>
+            <div className="card input">
               <ControlledInput
               placeholder=""
               onSubmit={this.handleAddStock}
               buttonText="Add Stock" />
-            </ListGroupItem>
-          </ListGroup>
+            </div>
+          </Col>
 
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

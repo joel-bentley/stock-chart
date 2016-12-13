@@ -1,4 +1,15 @@
 
-.list-group-item {
-  width: 260px;
+.card {
+  height: 50px;
+  margin-bottom: 7px;
+}
+
+.stock {
+  padding: 10px 5px 10px 80px;
+  border: 1px solid #888;
+  border-radius: 3px;
+}
+
+.input {
+    padding: 5px 10px 10px 10px;
 }
