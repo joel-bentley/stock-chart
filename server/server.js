@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
@@ -8,6 +9,9 @@ dotenv.load();
 var getStockData = require('./getStockData');
 
 var stockNames = ['GOOG','TSLA','MMM', 'AAPL'];
+
+
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('/', function(req, res){
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
