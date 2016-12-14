@@ -17,7 +17,7 @@ User story requirements for this project: (<https://www.freecodecamp.com/challen
 
 ---
 
-To use, first add .env files in root.
+To use, first add .env files in root and /client.
 Use yarn to install dependencies within root and /client directories.
 
 For development, type 'npm run dev'
