@@ -1,7 +1,7 @@
 import React from 'react'
 import { Col, Glyphicon } from 'react-bootstrap'
 import io from 'socket.io-client'
-const socket = io('http://localhost:3001')
+const socket = io(process.env.REACT_SERVER_URL)
 
 import ControlledInput from './components/ControlledInput'
 
