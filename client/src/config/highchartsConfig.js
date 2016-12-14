@@ -4,6 +4,10 @@ var highchartsConfig = {
       selected: 4
   },
 
+  title: {
+    text: 'Stock Chart'
+  },
+
   yAxis: {
       labels: {
           formatter: function () {
@@ -15,6 +19,18 @@ var highchartsConfig = {
           width: 2,
           color: 'silver'
       }]
+  },
+
+  navigator: {
+    enabled: false
+  },
+
+  scrollbar: {
+    enabled: false
+  },
+
+  credits: {
+      enabled: false
   },
 
   plotOptions: {
@@ -30,7 +46,7 @@ var highchartsConfig = {
       split: true
   },
 
-  series: []
+  series: null
 }
 
 export default highchartsConfig
