@@ -1,7 +1,7 @@
 # stock-chart
 Built for the 'Chart the Stock Market' challenge on Free Code Camp.
 
-**Live Demo:** ~~https://joel-bentley-stock-chart.herokuapp.com/~~ (not yet launched)
+**Live Demo:** https://joel-bentley-stock-chart.herokuapp.com/
 
 ---
 
@@ -17,7 +17,7 @@ User story requirements for this project: (<https://www.freecodecamp.com/challen
 
 ---
 
-To use, first add .env files in root and /client. These files require info from Oauth application setup on your Github account.
+To use, first add .env files in root.
 Use yarn to install dependencies within root and /client directories.
 
 For development, type 'npm run dev'
