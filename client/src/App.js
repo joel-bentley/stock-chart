@@ -46,7 +46,7 @@ class App extends React.Component {
 
     const anyNotLetters = /[^A-Z]/
 
-    if (stockNameToAdd !== '' && stockNameToAdd.length <= 4 && !anyNotLetters.test(stockNameToAdd)) {
+    if (stockNameToAdd !== '' && stockNameToAdd.length <= 6 && !anyNotLetters.test(stockNameToAdd)) {
       const newStocks = stocks
                           .filter( stock => (stock.name !== stockNameToAdd) )
                           .concat([ {
@@ -82,14 +82,17 @@ class App extends React.Component {
       lg: 3
     }
 
-    highchartsConfig.series = stocks
-
+    highchartsConfig.series = stocks.length ? (
+      stocks
+    ) : (
+      [{name: null, data: null}]
+    )
 
     return (
       <div className="container">
 
         <ReactHighstock config={highchartsConfig} />
-
+        <br />
         <div>
 
           {

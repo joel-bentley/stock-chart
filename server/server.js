@@ -31,7 +31,7 @@ io.on('connection', function(socket){
 
     var anyNotLetters = /[^A-Z]/;
 
-    if (stockNameToAdd !== '' && stockNameToAdd.length <= 4 && !anyNotLetters.test(stockNameToAdd)) {
+    if (stockNameToAdd !== '' && stockNameToAdd.length <= 6 && !anyNotLetters.test(stockNameToAdd)) {
       getStockData([ stockNameToAdd ])
         .then(function(stockData) {
 
