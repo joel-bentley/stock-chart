@@ -1,5 +1,4 @@
 var axios = require('axios');
-var sanitizer = require('sanitizer');
 
 var getStockData = function(stockList) {
   var now = new Date();
@@ -9,7 +8,7 @@ var getStockData = function(stockList) {
 
   return new Promise(function(resolve, reject) {
       axios.get('https://www.quandl.com/api/v3/datatables/WIKI/PRICES.json?' +
-            'ticker=' + sanitizer.sanitize(stockList.join(',')) +
+            'ticker=' + stockList.join(',') +
             '&qopts.columns=ticker,date,open' +
             '&api_key=' + process.env.QUANDL_API_KEY +
             '&date.gte=' + (year - 1) + '-' + month + '-' + date)

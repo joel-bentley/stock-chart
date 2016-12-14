@@ -42,7 +42,11 @@ class App extends React.Component {
   handleAddStock = stockNameToAdd => {
     const { stocks } = this.state
 
-    if (stockNameToAdd !== '') {
+    stockNameToAdd = stockNameToAdd.toUpperCase()
+
+    const anyNotLetters = /[^A-Z]/
+
+    if (stockNameToAdd !== '' && stockNameToAdd.length <= 4 && !anyNotLetters.test(stockNameToAdd)) {
       const newStocks = stocks
                           .filter( stock => (stock.name !== stockNameToAdd) )
                           .concat([ {
@@ -52,6 +56,9 @@ class App extends React.Component {
       this.setState({ stocks: newStocks })
 
       socket.emit('addedStock', { stockNameToAdd })
+
+    } else {
+      console.log('Invalid input')
     }
   }
 

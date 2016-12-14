@@ -18,7 +18,7 @@ io.on('connection', function(socket){
 
   getStockData(stockNames)
     .then(function(allStocks) {
-      
+
         socket.emit('sentAllStocks', { allStocks: allStocks });
       })
     .catch(err => console.log('error:', err))
@@ -29,23 +29,26 @@ io.on('connection', function(socket){
 
     var stockNameToAdd = data.stockNameToAdd;
 
-    getStockData([ stockNameToAdd ])
-      .then(function(stockData) {
+    var anyNotLetters = /[^A-Z]/;
 
-          var stockToAdd = stockData[0];
+    if (stockNameToAdd !== '' && stockNameToAdd.length <= 4 && !anyNotLetters.test(stockNameToAdd)) {
+      getStockData([ stockNameToAdd ])
+        .then(function(stockData) {
 
-          if (stockToAdd.data.length) {
-            stockNames = stockNames.concat([stockNameToAdd]);
-            return io.emit('addThisStock', { stockToAdd: stockToAdd });
-          }
+            var stockToAdd = stockData[0];
 
-          socket.emit('removeThisStock', { stockNameToRemove: stockNameToAdd });
-        })
-      .catch(err => {
-          socket.emit('removeThisStock', { stockNameToRemove: stockNameToAdd });
-          return console.log('error:', err);
-        });
+            if (stockToAdd.data.length) {
+              stockNames = stockNames.concat([stockNameToAdd]);
+              return io.emit('addThisStock', { stockToAdd: stockToAdd });
+            }
 
+            socket.emit('removeThisStock', { stockNameToRemove: stockNameToAdd });
+          })
+        .catch(err => {
+            socket.emit('removeThisStock', { stockNameToRemove: stockNameToAdd });
+            return console.log('error:', err);
+          });
+    }
   });
 
 
